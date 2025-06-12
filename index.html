@@ -3,28 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>쿠팡 바로가기</title>
+  <title>쿠팡 바로가기 설치</title>
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0078ff">
   <style>
-    body { margin:0; font-family:sans-serif; text-align:center; padding:40px; }
-    .button { background:#0078ff; color:#fff; padding:12px 24px; border:none; border-radius:8px; font-size:18px; cursor:pointer; }
-    .guide { margin-top:20px; color:#555; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #ffffff;
+    }
+    .button {
+      background: #0078ff;
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .guide {
+      margin-top: 30px;
+      color: #555;
+      font-size: 15px;
+    }
+    .notice {
+      background: #ffefc3;
+      border: 1px solid #ffd700;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>쿠팡 할인 바로가기</h1>
-  <img src="icons/icon-192.png" alt="쿠팡 아이콘" width="100">
-  <p><button class="button" id="goBtn">쿠팡으로 이동하기</button></p>
+  <h1>📲 쿠팡 바로가기 설치하기</h1>
+  <img src="icons/icon-192.png" alt="Coupang Icon" width="100">
+  <p>홈 화면에 설치하고 쿠팡 바로가기를 편하게 이용하세요!</p>
+
+  <button class="button" id="goBtn">쿠팡으로 이동</button>
+
+  <div class="notice" id="inAppNotice" style="display: none;">
+    ⚠️ 카카오톡 등에서 여신 경우:<br>
+    우측 상단 <strong>···</strong> 메뉴 → <strong>브라우저로 열기</strong>를 선택해주세요.<br>
+    그런 다음 홈 화면에 추가해 주세요!
+  </div>
+
   <p class="guide" id="installGuide" hidden>
-    📱 <span id="iosGuide">Safari '공유' → '홈 화면에 추가'</span><span id="andGuide" hidden>Chrome 메뉴 → '홈 화면에 추가'</span>
+    📱 <span id="iosGuide">Safari 공유 버튼 → 홈 화면에 추가</span>
+    <span id="andGuide" hidden>Chrome 메뉴 → 홈 화면에 추가</span>
   </p>
 
   <script>
     const COUPANG_URL = "https://link.coupang.com/a/cyOBSI";
-    document.getElementById('goBtn').onclick = () => location.href = COUPANG_URL;
+    const goBtn = document.getElementById("goBtn");
+    goBtn.onclick = () => location.href = COUPANG_URL;
 
+    // In-app browser 감지 (카카오톡, 인스타그램 등)
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes("kakaotalk") || ua.includes("instagram") || ua.includes("fbav")) {
+      document.getElementById("inAppNotice").style.display = "block";
+    }
+
+    // PWA 설치 유도
     let deferredPrompt;
     const guide = document.getElementById('installGuide');
     const iosGuide = document.getElementById('iosGuide');
@@ -37,17 +80,6 @@
       andGuide.hidden = false;
     });
 
-    guide.addEventListener('click', e => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(choice => {
-          deferredPrompt = null;
-          guide.hidden = true;
-        });
-      }
-    });
-
-    // iOS인지 확인
     const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
     if (isIos) {
       iosGuide.hidden = false;
