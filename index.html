@@ -61,6 +61,11 @@
     const goBtn = document.getElementById("goBtn");
     goBtn.onclick = () => location.href = COUPANG_URL;
 
+    // ✅ 설치된 상태면 바로 이동 (standalone 모드)
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+      window.location.href = COUPANG_URL;
+    }
+
     // In-app browser 감지 (카카오톡, 인스타그램 등)
     const ua = navigator.userAgent.toLowerCase();
     if (ua.includes("kakaotalk") || ua.includes("instagram") || ua.includes("fbav")) {
