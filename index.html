@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>쿠팡 바로가기</title>
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0078ff">
+  <style>
+    body { margin:0; font-family:sans-serif; text-align:center; padding:40px; }
+    .button { background:#0078ff; color:#fff; padding:12px 24px; border:none; border-radius:8px; font-size:18px; cursor:pointer; }
+    .guide { margin-top:20px; color:#555; }
+  </style>
+</head>
+<body>
+  <h1>쿠팡 할인 바로가기</h1>
+  <img src="icons/icon-192.png" alt="쿠팡 아이콘" width="100">
+  <p><button class="button" id="goBtn">쿠팡으로 이동하기</button></p>
+  <p class="guide" id="installGuide" hidden>
+    📱 <span id="iosGuide">Safari '공유' → '홈 화면에 추가'</span><span id="andGuide" hidden>Chrome 메뉴 → '홈 화면에 추가'</span>
+  </p>
+
+  <script>
+    const COUPANG_URL = "https://link.coupang.com/a/cyOBSI";
+    document.getElementById('goBtn').onclick = () => location.href = COUPANG_URL;
+
+    let deferredPrompt;
+    const guide = document.getElementById('installGuide');
+    const iosGuide = document.getElementById('iosGuide');
+    const andGuide = document.getElementById('andGuide');
+
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      guide.hidden = false;
+      andGuide.hidden = false;
+    });
+
+    guide.addEventListener('click', e => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choice => {
+          deferredPrompt = null;
+          guide.hidden = true;
+        });
+      }
+    });
+
+    // iOS인지 확인
+    const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+    if (isIos) {
+      iosGuide.hidden = false;
+      andGuide.hidden = true;
+      guide.hidden = false;
+    }
+  </script>
+</body>
+</html>

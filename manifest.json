@@ -1,0 +1,12 @@
+{
+  "short_name": "쿠팡바로가기",
+  "name": "쿠팡 할인 바로가기",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#0078ff",
+  "background_color": "#ffffff"
+}
